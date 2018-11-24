@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">MOOCs2018</string>
+    <string name="app_name">My Application</string>
+
+    <string name="lb_addAccountBanner">新增帳務</string>
+    <string name="lb_save">儲存</string>
+    <string name="lb_priceHint">price</string>
+    <string name="lb_categroyHint">收入/支出 分類選擇</string>
+    <string name="lb_categroy">分類</string>
+    <string name="lb_item">品名</string>
+    <string name="lb_payment">付款方式</string>
+    <string name="tx_payment">現金</string>
+    <string name="lb_date">日期</string>
+    <string name="lb_note">備註</string>
+
+
+    <string name="iv_desc">icon圖示</string>
 </resources>
