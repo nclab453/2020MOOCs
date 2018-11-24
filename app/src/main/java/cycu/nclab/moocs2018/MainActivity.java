@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     @Override   // annotation, 註解
     protected void onCreate(Bundle savedInstanceState) { // function, 函式
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bookkeeping_constraintlayout);
+        setContentView(R.layout.activity_bookkeeping_relative_layout);
 
 //        tx = findViewById(R.id.textView);
 //        bt = findViewById(R.id.button);
