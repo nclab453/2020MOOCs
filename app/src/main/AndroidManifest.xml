@@ -12,10 +12,13 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <!--下面這行是為了要符合Google政策和處理Warning訊息-->
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Bookkeeping"></activity>
     </application>
 
 </manifest>

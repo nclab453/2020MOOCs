@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">2018 MOOCs</string>
 
     <string name="lb_addAccountBanner">新增帳務</string>
     <string name="lb_save">儲存</string>
