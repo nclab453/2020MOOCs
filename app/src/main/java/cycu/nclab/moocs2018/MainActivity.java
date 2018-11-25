@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 myHandler.sendMessageDelayed(msg, 500); // 0.5秒後執行
                 break;
         }
+
     }
 
 
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // ---------------------使用handler的範例------------------------------------------------------
 
-    private Handler myHandler = new Handler(Looper.getMainLooper()) {
+    private Handler myHandler = new Handler(Looper.getMainLooper()){
 
         @Override
         public void handleMessage(Message msg) {
