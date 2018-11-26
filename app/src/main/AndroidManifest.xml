@@ -9,10 +9,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
-        <activity android:name=".Bookkeeping" />
+        <activity android:name=".Bookkeeping"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".CuteDog">
+
+        </activity>
+        <activity
+            android:name=".Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar">
+            <!--android:parentActivityName=".CuteDog"-->
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <!-- 下面這行是為了要符合Google政策和處理Warning訊息 -->
@@ -20,6 +32,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="cycu.nclab.moocs2018.CuteDog" />-->
         </activity>
     </application>
 
