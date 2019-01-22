@@ -3,6 +3,7 @@ package cycu.nclab.moocs2018;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,7 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class Bookkeeping extends AppCompatActivity implements View.OnClickListener {
+public class Bookkeeping extends AppCompatActivity implements View.OnClickListener, DatePickerFragment.OnDatePickerFragmentListener,
+                                                TimePickerFragment.OnTimePickerFragmentListener {
     final String TAG = this.getClass().getSimpleName();
     static int count = 0;
 
@@ -59,7 +61,10 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
 
 
     private void varInit() {
-        c = Calendar.getInstance();
+
+        if(c == null) {
+            c = Calendar.getInstance();
+        }
 
         theDate.setText(df2.format(c.getTime()));
         theTime.setText(df.format(c.getTime()));
@@ -123,28 +128,26 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.textView6:
                 // 設定日期
-                new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        c.set(Calendar.YEAR, year);
-                        c.set(Calendar.MONTH, month);
-                        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        theDate.setText(df2.format(c.getTime()));
-                    }
-                },c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+                DialogFragment dateFragment = DatePickerFragment.newInstance(c);
+                dateFragment.show(getSupportFragmentManager(), "datePicker");
                 break;
             case R.id.textView7:
                 // 設定時間
-                new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        c.set(Calendar.MINUTE, minute);
-                        theTime.setText(df.format(c.getTime()));
-                    }
-                }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true).show();
+                DialogFragment timeFragment = TimePickerFragment.newInstance(c);
+                timeFragment.show(getSupportFragmentManager(), "timePicker");
                 break;
         }
+    }
 
+    @Override
+    public void onDateSet(Calendar c) {
+        this.c.setTimeInMillis(c.getTimeInMillis());
+        theDate.setText(df2.format(c.getTime()));
+    }
+
+    @Override
+    public void onTimeSet(Calendar c) {
+        this.c.setTimeInMillis(c.getTimeInMillis());
+        theTime.setText(df.format(c.getTime()));
     }
 }
