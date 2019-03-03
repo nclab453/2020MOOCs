@@ -24,7 +24,16 @@
         <activity
             android:name=".Bookkeeping"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CuteDog"></activity>
+        <activity android:name=".CuteDog">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--&lt;!&ndash; 下面這行是為了要符合Google政策和處理Warning訊息 &ndash;&gt;-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
         <activity
             android:name=".BasicActivity"
             android:label="@string/title_activity_main2"

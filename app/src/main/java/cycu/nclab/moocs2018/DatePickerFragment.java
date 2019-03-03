@@ -21,10 +21,11 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
+
+import androidx.fragment.app.DialogFragment;
 
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
@@ -49,7 +50,7 @@ public class DatePickerFragment extends DialogFragment
         // Create a new instance of DatePickerDialog and return it
         return new DatePickerDialog(getActivity(), this, year, month, day) {
             @Override
-            public void onDateChanged(@android.support.annotation.NonNull DatePicker view, int year, int month, int dayOfMonth) {
+            public void onDateChanged(@androidx.annotation.NonNull DatePicker view, int year, int month, int dayOfMonth) {
                 super.onDateChanged(view, year, month, dayOfMonth);
                 onDateSet(view, year, month, dayOfMonth);
                 this.dismiss();

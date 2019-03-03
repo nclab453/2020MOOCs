@@ -18,16 +18,13 @@ package cycu.nclab.moocs2018;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
+
+import androidx.fragment.app.DialogFragment;
 
 public class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
@@ -109,5 +106,4 @@ public class TimePickerFragment extends DialogFragment
         super.onDetach();
         mListener = null;
     }
-
 }
