@@ -3,7 +3,9 @@ package cycu.nclab.moocs2018;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,6 +21,7 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
     TextView theDate, theTime;
 
     Button btSave;
+    Spinner spinner;
 
     SimpleDateFormat df2 = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
     // 設定日期顯示的格式
@@ -42,6 +45,8 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         theTime = findViewById(R.id.textView7);
 
         btSave = findViewById(R.id.button);
+        spinner = findViewById(R.id.spinner);
+
     }
 
 
@@ -63,6 +68,15 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
 
         theDate.setText(df2.format(c.getTime()));
         theTime.setText(df.format(c.getTime()));
+
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.category, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
 
     }
 
