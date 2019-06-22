@@ -3,8 +3,10 @@ package cycu.nclab.moocs2018;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
@@ -21,7 +23,9 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
     TextView theDate, theTime;
 
     Button btSave;
-    Spinner spinner;
+    Spinner mCategory, mPayment, addItem;
+    String[] expItems, items;
+    EditText mItem;
 
     SimpleDateFormat df2 = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
     // 設定日期顯示的格式
@@ -45,7 +49,12 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         theTime = findViewById(R.id.textView7);
 
         btSave = findViewById(R.id.button);
-        spinner = findViewById(R.id.spinner);
+        mCategory = findViewById(R.id.spinner);
+        mPayment = findViewById(R.id.spinner1);
+        addItem = findViewById(R.id.spinner2);
+        mItem = findViewById(R.id.editText1);
+
+        expItems = getResources().getStringArray(R.array.Default_ExpenseItems);
 
     }
 
@@ -76,15 +85,57 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
+        mCategory.setAdapter(adapter);
+
+        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this,
+                R.array.Default_PaymentMethods, android.R.layout.simple_spinner_item);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mPayment.setAdapter(adapter1);
+
+        items = expItems[0].split(",");
+        mItem.setText(items[0]);
+
+        ArrayAdapter<CharSequence> adapter2 = new ArrayAdapter(this, R.layout.simple_spinner_item, items);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        addItem.setAdapter(adapter2);
 
     }
+
+    private AdapterView.OnItemSelectedListener setItem = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            mItem.setText(parent.getSelectedItem().toString());
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener categroyChanged = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            items = expItems[position].split(",");
+            ArrayAdapter<CharSequence> adapter2 = new ArrayAdapter(getApplicationContext(), R.layout.simple_spinner_item, items);
+            adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            addItem.setAdapter(adapter2);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
 
 
     private void registerListener() {
         theDate.setOnClickListener(this);
         theTime.setOnClickListener(this);
         btSave.setOnClickListener(this);
+        addItem.setOnItemSelectedListener(setItem);
+        mCategory.setOnItemSelectedListener(categroyChanged);
     }
 
 
@@ -100,6 +151,8 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         theDate.setOnClickListener(null);
         theTime.setOnClickListener(null);
         btSave.setOnClickListener(null);
+        addItem.setOnItemSelectedListener(null);
+        mCategory.setOnItemSelectedListener(null);
     }
 
 
@@ -133,7 +186,7 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.button:
                 // 儲存帳務資料
-                finish();
+                //finish();
                 break;
             case R.id.textView6:
                 // 設定日期

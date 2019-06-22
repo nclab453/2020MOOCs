@@ -10,4 +10,5 @@
     <color name="tabTransparent">#10ffffff</color>
     <color name="buttonDark">#58372B</color>
     <color name="buttonMedium">#BEA885</color>
+    <color name="transparent">#00000000</color>
 </resources>
