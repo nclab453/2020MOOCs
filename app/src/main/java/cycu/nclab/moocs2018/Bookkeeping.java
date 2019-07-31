@@ -37,7 +37,8 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
     // 設定時間顯示的格式
 
     Calendar c;
-    DB db = new DB(this);
+//    DB db = new DB(this);
+    DB_s db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -236,6 +237,7 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
 
         if (oldOne == null || !oldOne.equals(itemValue)) {
             oldOne = itemValue;
+            db = DB_s.getInstance(this);
             db.openToWrite();
             db.insert(itemValue);
             db.close();
