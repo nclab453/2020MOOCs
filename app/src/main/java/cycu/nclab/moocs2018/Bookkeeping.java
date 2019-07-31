@@ -1,5 +1,6 @@
 package cycu.nclab.moocs2018;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +26,10 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
     Button btSave;
     Spinner mCategory, mPayment, addItem;
     String[] expItems, items;
-    EditText mItem;
+    EditText mItem, mPrice, mMemo;
+
+    SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
+    /*用來存在資料庫裏面的日期與時間格式*/
 
     SimpleDateFormat df2 = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
     // 設定日期顯示的格式
@@ -33,6 +37,7 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
     // 設定時間顯示的格式
 
     Calendar c;
+    DB db = new DB(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,8 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         mPayment = findViewById(R.id.spinner1);
         addItem = findViewById(R.id.spinner2);
         mItem = findViewById(R.id.editText1);
+        mMemo = findViewById(R.id.editText2);
+        mPrice = findViewById(R.id.editText);
 
         expItems = getResources().getStringArray(R.array.Default_ExpenseItems);
 
@@ -143,6 +150,8 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
     protected void onStop() {
         Log.d(TAG, "enter onStop(), #" + count);
         releaseListener();
+        if (db != null)
+            db.close();
 
         super.onStop();
     }
@@ -186,7 +195,7 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.button:
                 // 儲存帳務資料
-                //finish();
+                saveItem();
                 break;
             case R.id.textView6:
                 // 設定日期
@@ -199,6 +208,43 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
                 timeFragment.show(getSupportFragmentManager(), "timePicker");
                 break;
         }
+    }
+
+    ContentValues oldOne;
+
+    private boolean saveItem() {
+
+        ContentValues itemValue = new ContentValues();
+
+        // 1. 金額
+        String tmp = mPrice.getText().toString();
+        if (tmp == null || "".equals(tmp))
+            return false;
+        else {
+            // 這裡沒有做輸入檢查
+            itemValue.put(DB.KEY_MONEY, Double.valueOf(tmp));
+        }
+
+        // 2. 其他，沒填就是空白
+        itemValue.put(DB.KEY_CATEGORY, mCategory.getSelectedItem().toString());
+        itemValue.put(DB.KEY_ITEM, mItem.getText().toString().trim());
+        itemValue.put(DB.KEY_PAYSTYLE, mPayment.getSelectedItem().toString());
+        itemValue.put(DB.KEY_MEMO, mMemo.getText().toString());
+        itemValue.put(DB.KEY_DATE, dbFormat.format(c.getTime()));
+
+        // TODO 3. 照片縮圖
+
+        if (oldOne == null || !oldOne.equals(itemValue)) {
+            oldOne = itemValue;
+            db.openToWrite();
+            db.insert(itemValue);
+            db.close();
+        }
+        else {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
