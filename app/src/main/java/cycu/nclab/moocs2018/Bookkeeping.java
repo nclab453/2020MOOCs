@@ -1,6 +1,6 @@
 package cycu.nclab.moocs2018;
 
-import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,9 +12,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+
+import cycu.nclab.moocs2018.room.DB_r;
+import cycu.nclab.moocs2018.room.MoneyEntity;
 
 public class Bookkeeping extends AppCompatActivity implements View.OnClickListener, DatePickerFragment.OnDatePickerFragmentListener,
                                                 TimePickerFragment.OnTimePickerFragmentListener {
@@ -38,7 +42,7 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
 
     Calendar c;
 //    DB db = new DB(this);
-    DB_s db;
+//    DB_s db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +80,6 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         Log.d(TAG, "enter onStart(), #" + count);
     }
 
-
     private void varInit() {
 
         if(c == null) {
@@ -107,7 +110,31 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         addItem.setAdapter(adapter2);
 
+        // 資料庫驗證程式，以除錯模式追蹤
+//        List<MoneyEntity> dailyData = DB_r.getDailyData(this, c);
+//
+//        MoneyEntity newOne = new MoneyEntity();
+//        newOne.setId(2);
+//        newOne.setPrice(123456);
+//        newOne.setTimestamp(dbFormat.format(c.getTime()));
+//
+//        DB_r.update(this, newOne);
+//
+//        List<MoneyEntity> dailyData2 = DB_r.getDailyData(this, c);
+//
+//        DB_r.delete(this, newOne);
+//
+//        dailyData = DB_r.getDailyData(this, c);
+//
+//        Cursor cursor = DB_r.getAll(this);
+//
+//        String[] columnNames = cursor.getColumnNames();
+//        while (cursor.moveToNext()) {
+//            Log.d(TAG, String.valueOf(cursor.getDouble(cursor.getColumnIndex(columnNames[3]))));
+//        }
+
     }
+
 
     private AdapterView.OnItemSelectedListener setItem = new AdapterView.OnItemSelectedListener() {
         @Override
@@ -151,9 +178,6 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
     protected void onStop() {
         Log.d(TAG, "enter onStop(), #" + count);
         releaseListener();
-        if (db != null)
-            db.close();
-
         super.onStop();
     }
 
@@ -211,11 +235,11 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    ContentValues oldOne;
+    MoneyEntity oldOne;
 
     private boolean saveItem() {
 
-        ContentValues itemValue = new ContentValues();
+        MoneyEntity itemValue = new MoneyEntity();
 
         // 1. 金額
         String tmp = mPrice.getText().toString();
@@ -223,24 +247,21 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
             return false;
         else {
             // 這裡沒有做輸入檢查
-            itemValue.put(DB.KEY_MONEY, Double.valueOf(tmp));
+            itemValue.setPrice(Double.valueOf(tmp));
         }
 
         // 2. 其他，沒填就是空白
-        itemValue.put(DB.KEY_CATEGORY, mCategory.getSelectedItem().toString());
-        itemValue.put(DB.KEY_ITEM, mItem.getText().toString().trim());
-        itemValue.put(DB.KEY_PAYSTYLE, mPayment.getSelectedItem().toString());
-        itemValue.put(DB.KEY_MEMO, mMemo.getText().toString());
-        itemValue.put(DB.KEY_DATE, dbFormat.format(c.getTime()));
+        itemValue.setCategory(mCategory.getSelectedItem().toString());
+        itemValue.setItem(mItem.getText().toString().trim());
+        itemValue.setPayStyle(mPayment.getSelectedItem().toString());
+        itemValue.setMemo(mMemo.getText().toString());
+        itemValue.setTimestamp(dbFormat.format(c.getTime()));
 
         // TODO 3. 照片縮圖
 
         if (oldOne == null || !oldOne.equals(itemValue)) {
             oldOne = itemValue;
-            db = DB_s.getInstance(this);
-            db.openToWrite();
-            db.insert(itemValue);
-            db.close();
+            DB_r.insert(this, itemValue);
         }
         else {
             return false;
