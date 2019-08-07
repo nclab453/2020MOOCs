@@ -12,19 +12,6 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <!-- 下面這行是為了要符合Google政策和處理Warning訊息 -->
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".Bookkeeping"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CuteDog">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
                 <!--&lt;!&ndash; 下面這行是為了要符合Google政策和處理Warning訊息 &ndash;&gt;-->
@@ -32,6 +19,22 @@
 
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".Bookkeeping"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".pref.PrefsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".CuteDog">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <!-- 下面這行是為了要符合Google政策和處理Warning訊息 -->
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity

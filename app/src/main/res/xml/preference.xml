@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:title="@string/pref_category_name">
+
+        <ListPreference
+            android:defaultValue="@string/default_three"
+            android:dialogTitle="@string/lb_cuteDogSetting"
+            android:entries="@array/entries_ofCuteDog"
+            android:entryValues="@array/entries_ofCuteDog"
+            android:key="@string/Pref_keyForCuteDogSetting"
+            android:title="@string/lb_cuteDogSetting" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
+

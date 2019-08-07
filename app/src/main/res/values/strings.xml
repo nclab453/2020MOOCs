@@ -26,4 +26,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pref_category_name">JUST FOR DEMO</string>
+    <string name="default_three">3</string> <!-- 一定要整數 -->
+    <string name="lb_cuteDogSetting">每秒繞圈數：</string>
+    <string name="Pref_keyForCuteDogSetting">KEY_forCuteDogSetting</string>
+    <string name="Pref_summaryCurrentlySetting">目前設定：每秒</string>
+    <string name="Pref_round">圈</string>
 </resources>
