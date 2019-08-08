@@ -48,13 +48,25 @@ public class PrefsActivity extends Activity {
 			// 註冊所有的ListPreference
 			preferences.registerOnSharedPreferenceChangeListener(this);
 
-			// ListPreference
-			String key = res.getString(R.string.Pref_keyForCuteDogSetting);
+            // run or no run
+            String key = res.getString(R.string.Pref_keyForRun);
+            findPreference(key).setOnPreferenceClickListener(this);
+            if (preferences.getBoolean(key, true))
+                findPreference(key).setSummary(
+                        getString(R.string.Pref_summaryCurrentlySetting)
+                                + res.getString(R.string.msg_run));
+            else
+                findPreference(key).setSummary(
+                        getString(R.string.Pref_summaryCurrentlySetting)
+                                + res.getString(R.string.msg_stop));
+
+			// ListPreference: 圈圈數
+			key = res.getString(R.string.Pref_keyForCuteDogSetting);
 			String[] entries = getResources().getStringArray(
 					R.array.entries_ofCuteDog);
 			findPreference(key).setOnPreferenceClickListener(this);
 			findPreference(key).setSummary(
-					getString(R.string.Pref_summaryCurrentlySetting)
+					getString(R.string.Pref_summaryCurrentlySetting) + res.getString(R.string.msg_perSec)
 							+ " "
 							+ entries[Integer.valueOf(preferences.getString(key,
 							res.getString(R.string.default_three))) -1]
@@ -69,7 +81,7 @@ public class PrefsActivity extends Activity {
 			getPreferenceScreen().getSharedPreferences()
 					.unregisterOnSharedPreferenceChangeListener(this);
 
-			// PreferenceScreen的註冊解除不會用
+			// PreferenceScreen的註冊解除
 		}
 
 		// ListPreference的點擊事件處理，有數值改變才會觸發
@@ -78,8 +90,18 @@ public class PrefsActivity extends Activity {
 			Log.d(TAG, "enter onSharedPreferenceChanged");
 			// 這支副程式主要處理偏好設定的細項說明部分，the part of summary
 			Resources res = getResources();
-			if (key.equals(res.getString(R.string.Pref_keyForCuteDogSetting))) {
-				// 記帳起始日
+			if (key.equals(res.getString(R.string.Pref_keyForRun))) {
+				// 繞圈設定
+				if (preferences.getBoolean(key, false))
+					findPreference(key).setSummary(
+							getString(R.string.Pref_summaryCurrentlySetting)
+									+ res.getString(R.string.msg_run));
+				else
+					findPreference(key).setSummary(
+							getString(R.string.Pref_summaryCurrentlySetting)
+									+ res.getString(R.string.msg_stop));
+			} else if (key.equals(res.getString(R.string.Pref_keyForCuteDogSetting))) {
+				// 圈數設定
 				String[] entries = getResources().getStringArray(
 						R.array.entries_ofCuteDog);
 				findPreference(key).setSummary(

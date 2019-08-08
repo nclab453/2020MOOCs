@@ -49,10 +49,13 @@ public class CuteDog extends AppCompatActivity {
         interval = (int) (1000 / (3*Prefs.getCuteDogCircles(this)));
 
         Log.d(TAG, "Interval = " + interval);
-        Message msg = myHandler.obtainMessage();
-        msg.what = IMAGE_TWO;
+
         myHandler.removeCallbacksAndMessages(null); // 先清除舊的msg
-        myHandler.sendMessageDelayed(msg, interval); // interval毫秒後執行
+        if (Prefs.isRun(this)) {
+            Message msg = myHandler.obtainMessage();
+            msg.what = IMAGE_TWO;
+            myHandler.sendMessageDelayed(msg, interval); // interval毫秒後執行
+        }
     }
 
     @Override

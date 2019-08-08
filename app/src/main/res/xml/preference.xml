@@ -4,6 +4,11 @@
     <PreferenceCategory
         android:title="@string/pref_category_name">
 
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/Pref_keyForRun"
+            android:title="@string/lb_dogRun" />
+
         <ListPreference
             android:defaultValue="@string/default_three"
             android:dialogTitle="@string/lb_cuteDogSetting"

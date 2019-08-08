@@ -42,4 +42,11 @@ public class Prefs {
 		String key = res.getString(R.string.Pref_keyForCuteDogSetting);
 		return Integer.valueOf(prefs.getString(key, res.getString(R.string.default_three)));
 	}
+
+	public static boolean isRun(Context c) {
+		if (PrefObject == null)
+			getInstance(c);
+		String key = res.getString(R.string.Pref_keyForRun);
+		return prefs.getBoolean(key, true);
+	}
 }
