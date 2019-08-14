@@ -37,4 +37,7 @@
     <string name="msg_run">繞圈</string>
     <string name="msg_stop">靜止</string>
     <string name="msg_perSec">每秒</string>
+    <string name="tx_subCategory">晚餐</string>
+    <string name="tx_itemCost">500</string>
+    <string name="tx_Category">食</string>
 </resources>

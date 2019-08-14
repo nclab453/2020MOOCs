@@ -44,13 +44,10 @@ public class CuteDog extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        interval = (int) (1000 /(3*Prefs.getCuteDogCircles(this)));
 //        SystemClock.sleep(100000);
         // 使用Handler自動切換螢幕畫面
-        interval = (int) (1000 / (3*Prefs.getCuteDogCircles(this)));
 
-        Log.d(TAG, "Interval = " + interval);
-
-        myHandler.removeCallbacksAndMessages(null); // 先清除舊的msg
         if (Prefs.isRun(this)) {
             Message msg = myHandler.obtainMessage();
             msg.what = IMAGE_TWO;

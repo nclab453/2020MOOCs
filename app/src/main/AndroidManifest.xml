@@ -9,25 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".RecyclerViewActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--&lt;!&ndash; 下面這行是為了要符合Google政策和處理Warning訊息 &ndash;&gt;-->
-                <!--<action android:name="android.intent.action.VIEW" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
-
-        <activity
-            android:name=".Bookkeeping"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".pref.PrefsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CuteDog">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <!-- 下面這行是為了要符合Google政策和處理Warning訊息 -->
@@ -36,7 +21,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Bookkeeping"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".pref.PrefsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".CuteDog">
 
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- &lt;!&ndash; 下面這行是為了要符合Google政策和處理Warning訊息 &ndash;&gt; -->
+            <!-- <action android:name="android.intent.action.VIEW" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
         <activity
             android:name=".BasicActivity"
             android:label="@string/title_activity_main2"
@@ -53,11 +54,13 @@
             android:name=".TabbedActivity"
             android:label="@string/title_activity_tabbed"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
     </application>
 

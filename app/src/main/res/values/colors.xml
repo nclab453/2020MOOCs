@@ -3,6 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ff4081</color>
+    <color name="textColor">#4080FF</color>
 
 
     <color name="bannerDark">#58372B</color>
@@ -11,4 +12,6 @@
     <color name="buttonDark">#58372B</color>
     <color name="buttonMedium">#BEA885</color>
     <color name="transparent">#00000000</color>
+    <color name="cellGround">#EE444444</color>
+    <color name="searchCost">#77211E</color>
 </resources>

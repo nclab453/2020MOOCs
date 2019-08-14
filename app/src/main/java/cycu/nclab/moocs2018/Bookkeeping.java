@@ -1,6 +1,9 @@
 package cycu.nclab.moocs2018;
 
-import android.database.Cursor;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,11 +15,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
-
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import cycu.nclab.moocs2018.recyclerview.AccountListFragment;
 import cycu.nclab.moocs2018.room.DB_r;
 import cycu.nclab.moocs2018.room.MoneyEntity;
 
@@ -221,6 +225,15 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
             case R.id.button:
                 // 儲存帳務資料
                 saveItem();
+                // 呼叫本日帳務紀錄
+                // 將Fragement貼上此Activity
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                Fragment accountFragment = AccountListFragment.newInstance(1);
+//                fragmentTransaction.add(android.R.id.content, accountFragment, "accountFragment");
+//                fragmentTransaction.commit();
+                // 轉跳另一個Activity
+                startActivity(new Intent(this, RecyclerViewActivity.class));
                 break;
             case R.id.textView6:
                 // 設定日期
