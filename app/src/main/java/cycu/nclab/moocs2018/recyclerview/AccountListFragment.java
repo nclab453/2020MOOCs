@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +35,9 @@ public class AccountListFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     List<MoneyEntity> dailyAccount = new ArrayList<>();
+
+    private ItemTouchHelper mItemTouchHelper;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -76,7 +80,12 @@ public class AccountListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             dailyAccount = DB_r.getDailyData(getActivity(), Calendar.getInstance());
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(dailyAccount, mListener));
+            MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter(dailyAccount, mListener);
+            recyclerView.setAdapter(adapter);
+
+            ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(adapter);
+            mItemTouchHelper = new ItemTouchHelper(callback);
+            mItemTouchHelper.attachToRecyclerView(recyclerView);
         }
         return view;
     }
