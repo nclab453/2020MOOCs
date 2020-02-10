@@ -1,26 +1,30 @@
 package cycu.nclab.moocs2018;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-import cycu.nclab.moocs2018.recyclerview.AccountListFragment;
 import cycu.nclab.moocs2018.room.DB_r;
 import cycu.nclab.moocs2018.room.MoneyEntity;
 
@@ -28,6 +32,8 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
                                                 TimePickerFragment.OnTimePickerFragmentListener {
     final String TAG = this.getClass().getSimpleName();
     static int count = 0;
+    final int MY_PERMISSIONS_REQUEST_CAMERA = 33216;
+    final int MY_IMAGE_CAPTURE_CODE = 22753;
 
     TextView theDate, theTime;
 
@@ -35,6 +41,7 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
     Spinner mCategory, mPayment, addItem;
     String[] expItems, items;
     EditText mItem, mPrice, mMemo;
+    ImageView mCamera;
 
     SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
     /*用來存在資料庫裏面的日期與時間格式*/
@@ -72,6 +79,7 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
 
         expItems = getResources().getStringArray(R.array.Default_ExpenseItems);
 
+        mCamera = findViewById(R.id.imageView);
     }
 
 
@@ -113,30 +121,6 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         ArrayAdapter<CharSequence> adapter2 = new ArrayAdapter(this, R.layout.simple_spinner_item, items);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         addItem.setAdapter(adapter2);
-
-        // 資料庫驗證程式，以除錯模式追蹤
-//        List<MoneyEntity> dailyData = DB_r.getDailyData(this, c);
-//
-//        MoneyEntity newOne = new MoneyEntity();
-//        newOne.setId(2);
-//        newOne.setPrice(123456);
-//        newOne.setTimestamp(dbFormat.format(c.getTime()));
-//
-//        DB_r.update(this, newOne);
-//
-//        List<MoneyEntity> dailyData2 = DB_r.getDailyData(this, c);
-//
-//        DB_r.delete(this, newOne);
-//
-//        dailyData = DB_r.getDailyData(this, c);
-//
-//        Cursor cursor = DB_r.getAll(this);
-//
-//        String[] columnNames = cursor.getColumnNames();
-//        while (cursor.moveToNext()) {
-//            Log.d(TAG, String.valueOf(cursor.getDouble(cursor.getColumnIndex(columnNames[3]))));
-//        }
-
     }
 
 
@@ -175,6 +159,8 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         btSave.setOnClickListener(this);
         addItem.setOnItemSelectedListener(setItem);
         mCategory.setOnItemSelectedListener(categroyChanged);
+
+        mCamera.setOnClickListener(this);
     }
 
 
@@ -191,6 +177,8 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         btSave.setOnClickListener(null);
         addItem.setOnItemSelectedListener(null);
         mCategory.setOnItemSelectedListener(null);
+
+        mCamera.setOnClickListener(null);
     }
 
 
@@ -226,12 +214,6 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
                 // 儲存帳務資料
                 saveItem();
                 // 呼叫本日帳務紀錄
-                // 將Fragement貼上此Activity
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                Fragment accountFragment = AccountListFragment.newInstance(1);
-//                fragmentTransaction.add(android.R.id.content, accountFragment, "accountFragment");
-//                fragmentTransaction.commit();
                 // 轉跳另一個Activity
                 startActivity(new Intent(this, RecyclerViewActivity.class));
                 break;
@@ -245,6 +227,71 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
                 DialogFragment timeFragment = TimePickerFragment.newInstance(c);
                 timeFragment.show(getSupportFragmentManager(), "timePicker");
                 break;
+            case R.id.imageView:
+                // 開啟照相機
+                useCamera();
+                break;
+        }
+    }
+
+    private void useCamera() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            // Should we show an explanation?
+            Log.d(TAG, "check camera permission");
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.CAMERA)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                Toast.makeText(this, "需要權限才能夠使用照相機", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "show toast.");
+
+                // 若有需要，再次詢問使用者，要求同意權限
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.CAMERA},
+//                        MY_PERMISSIONS_REQUEST_CAMERA);
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CAMERA},
+                        MY_PERMISSIONS_REQUEST_CAMERA);
+
+                // MY_PERMISSIONS_REQUEST_CAMERA is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+            Intent cInt = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cInt,MY_IMAGE_CAPTURE_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Intent cInt = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cInt,MY_IMAGE_CAPTURE_CODE);
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(this, "需要權限才能夠使用照相機", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
         }
     }
 
