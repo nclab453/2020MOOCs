@@ -50,6 +50,10 @@ public abstract class DB_r extends RoomDatabase {
         return getDatabase(c).moneyDao().getAll();
     }
 
+    public static void deleteByID(Context c, int id) {
+        getDatabase(c).moneyDao().deleteByID(id);
+    }
+
     /**
      * 使用AsyncTask的簡易範例
      */

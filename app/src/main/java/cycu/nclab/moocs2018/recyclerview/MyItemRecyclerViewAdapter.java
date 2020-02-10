@@ -1,5 +1,7 @@
 package cycu.nclab.moocs2018.recyclerview;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import cycu.nclab.moocs2018.R;
 import cycu.nclab.moocs2018.recyclerview.AccountListFragment.OnListFragmentInteractionListener;
+import cycu.nclab.moocs2018.room.DB_r;
 import cycu.nclab.moocs2018.room.MoneyEntity;
 
 import java.util.List;
@@ -22,12 +25,20 @@ import java.util.List;
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> implements ItemTouchHelperListener {
 
     final String TAG = this.getClass().getSimpleName();
-    private final List<MoneyEntity> mValues;
-    private final OnListFragmentInteractionListener mListener;
 
-    public MyItemRecyclerViewAdapter(List<MoneyEntity> accounts, OnListFragmentInteractionListener listener) {
-        mValues = accounts;
-        mListener = listener;
+    Cursor mCursor;
+    Context mContext;
+
+    public MyItemRecyclerViewAdapter(Cursor cursor, Context context) {
+        mCursor = cursor;
+        mContext = context;
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        mCursor.moveToPosition(position);
+        return mCursor.getInt(0);
     }
 
     @Override
@@ -40,26 +51,14 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mAccount = mValues.get(position);
-        holder.mCategory.setText(mValues.get(position).getCategory());
-        holder.mItem.setText(mValues.get(position).getItem());
-        holder.mPrice.setText(String.valueOf(mValues.get(position).getPrice()));
-
-//        holder.mView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (null != mListener) {
-//                    // Notify the active callbacks interface (the activity, if the
-//                    // fragment is attached to one) that an item has been selected.
-//                    mListener.onListFragmentInteraction(holder.mAccount);
-//                }
-//            }
-//        });
+        holder.mCategory.setText(mCursor.getString(1));
+        holder.mItem.setText(mCursor.getString(2));
+        holder.mPrice.setText(String.valueOf(mCursor.getDouble(3)));
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mCursor.getCount();
     }
 
     @Override
@@ -69,9 +68,14 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public void onItemDismiss(int position) {
-        mValues.remove(position);
-        notifyItemRemoved(position);
+        if(!mCursor.moveToPosition(position)) {
+            return;
+        }
+        int id = mCursor.getInt(0);
+        DB_r.deleteByID(mContext, id);
+        mCursor = DB_r.getAll(mContext);
 
+        notifyItemRemoved(position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -79,7 +83,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final TextView mCategory;
         public final TextView mItem;
         public final TextView mPrice;
-        public MoneyEntity mAccount;
 
         public ViewHolder(View view) {
             super(view);
@@ -89,10 +92,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             mPrice = (TextView) view.findViewById(R.id.itemCost);
         }
 
-//        @Override
-//        public String toString() {
-//            return super.toString() + " '" + mPrice.getText() + "'";
-//        }
         @Override
         public String toString() {
             return "mPrice = '" + mPrice.getText() + "'";

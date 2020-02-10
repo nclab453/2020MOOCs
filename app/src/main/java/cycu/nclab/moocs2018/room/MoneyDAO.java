@@ -29,6 +29,9 @@ public interface MoneyDAO {
     @Query("SELECT * FROM moneycare WHERE id = :id")
     public MoneyEntity getByID(int id);
 
+    @Query("DELETE FROM moneycare WHERE id = :id")
+    public void deleteByID(int id);
+
     @Query("SELECT * FROM moneycare")
     public Cursor getAll();
 

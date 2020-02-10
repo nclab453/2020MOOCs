@@ -1,6 +1,7 @@
 package cycu.nclab.moocs2018.recyclerview;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,9 +35,9 @@ public class AccountListFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    List<MoneyEntity> dailyAccount = new ArrayList<>();
 
     private ItemTouchHelper mItemTouchHelper;
+    Cursor cursor;
 
 
     /**
@@ -79,8 +80,8 @@ public class AccountListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            dailyAccount = DB_r.getDailyData(getActivity(), Calendar.getInstance());
-            MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter(dailyAccount, mListener);
+            cursor = DB_r.getAll(context);
+            MyItemRecyclerViewAdapter adapter = new MyItemRecyclerViewAdapter(cursor, context);
             recyclerView.setAdapter(adapter);
 
             ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(adapter);
