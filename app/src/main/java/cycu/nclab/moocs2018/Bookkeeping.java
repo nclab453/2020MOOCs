@@ -1,11 +1,13 @@
 package cycu.nclab.moocs2018;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -266,7 +268,7 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         } else {
             // Permission has already been granted
             Intent cInt = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(cInt,MY_IMAGE_CAPTURE_CODE);
+            startActivityForResult(cInt, MY_IMAGE_CAPTURE_CODE);
         }
     }
 
@@ -294,6 +296,27 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
             // permissions this app might request.
         }
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Check which request we're responding to
+        if (requestCode == MY_IMAGE_CAPTURE_CODE) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK && data.hasExtra("data")) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+
+                // Do something with the contact here (bigger example below)
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                if (bitmap != null) {
+                    mCamera.setImageBitmap(bitmap);
+                }
+            }
+        }
+    }
+
 
     MoneyEntity oldOne;
 
