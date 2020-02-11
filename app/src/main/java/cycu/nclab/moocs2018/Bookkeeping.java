@@ -27,11 +27,15 @@ import java.util.Calendar;
 import java.util.Locale;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import cycu.nclab.moocs2018.room.DB_r;
 import cycu.nclab.moocs2018.room.MoneyEntity;
 
 public class Bookkeeping extends AppCompatActivity implements View.OnClickListener, DatePickerFragment.OnDatePickerFragmentListener,
-                                                TimePickerFragment.OnTimePickerFragmentListener {
+                                                TimePickerFragment.OnTimePickerFragmentListener, FragmentKrop.OnFragmentInteractionListener {
     final String TAG = this.getClass().getSimpleName();
     static int count = 0;
     final int MY_PERMISSIONS_REQUEST_CAMERA = 33216;
@@ -252,9 +256,9 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
                 Log.d(TAG, "show toast.");
 
                 // 若有需要，再次詢問使用者，要求同意權限
-//                ActivityCompat.requestPermissions(this,
-//                        new String[]{Manifest.permission.CAMERA},
-//                        MY_PERMISSIONS_REQUEST_CAMERA);
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CAMERA},
+                        MY_PERMISSIONS_REQUEST_CAMERA);
             } else {
                 // No explanation needed; request the permission
                 ActivityCompat.requestPermissions(this,
@@ -311,7 +315,12 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
                 // Do something with the contact here (bigger example below)
                 Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                 if (bitmap != null) {
-                    mCamera.setImageBitmap(bitmap);
+                    // 將Fragement貼上此Activity
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    Fragment accountFragment = FragmentKrop.newInstance(bitmap);
+                    fragmentTransaction.add(android.R.id.content, accountFragment, "accountFragment");
+                    fragmentTransaction.commit();
                 }
             }
         }
@@ -363,5 +372,11 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
     public void onTimeSet(Calendar c) {
         this.c.setTimeInMillis(c.getTimeInMillis());
         theTime.setText(df.format(c.getTime()));
+    }
+
+    @Override
+    public void onFragmentInteraction(Bitmap bitmap) {
+        // 從第三方函式庫回傳，設定照片縮圖
+        mCamera.setImageBitmap(bitmap);
     }
 }
