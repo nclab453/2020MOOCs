@@ -94,7 +94,7 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
         super.onStart();
 
         varInit();
-        registerListener();
+        registListener();
         Log.d(TAG, "enter onStart(), #" + count);
     }
 
@@ -159,7 +159,7 @@ public class Bookkeeping extends AppCompatActivity implements View.OnClickListen
     };
 
 
-    private void registerListener() {
+    private void registListener() {
         theDate.setOnClickListener(this);
         theTime.setOnClickListener(this);
         btSave.setOnClickListener(this);
